@@ -28,4 +28,11 @@ app.post('/tweets', (req,res)=>{
     //res.send(tweets);
 });
 
+app.get('/tweets', (req,res)=>{
+    if(tweets.length<=10){
+        res.send(tweets);
+    }
+    res.send(tweets.slice(tweets.length-11,tweets.length-1));
+})
+
 app.listen(5000,()=>console.log("Servidor rodou!"));
