@@ -13,13 +13,19 @@ app.use(
 
 app.use(express.json());
 
-const user=[];
-const tweet=[];
+const users=[];
+const tweets=[];
 
 app.post('/sign-up',(req,res)=>{
-    user.push(req.body)
-    res.send("OK");
+    users.push(req.body);
+    res.send('OK');
     // res.send(user);
+});
+
+app.post('/tweets', (req,res)=>{
+    tweets.push(req.body);
+    res.send('OK');
+    //res.send(tweets);
 });
 
 app.listen(5000,()=>console.log("Servidor rodou!"));
