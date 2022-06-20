@@ -26,10 +26,12 @@ app.post('/sign-up',(req,res)=>{
 });
 
 app.post('/tweets', (req,res)=>{
-    if(req.body.username==="" || req.body.tweet===""){
+    const userName=(req.header('User'));
+    const tweet=req.body.tweet;
+    if(userName==="" || req.body.tweet===""){
         res.status(400).send('Todos os campos são obrigatórios!');
     }else{ 
-        tweets.push(req.body);
+        tweets.push({tweet,username:userName});
         res.status(201).send('OK');
     }
 });
@@ -44,13 +46,13 @@ function generateTweetsToSend(){
 app.get('/tweets', (req,res)=>{
     const newTweets=generateTweetsToSend();
     const num=parseInt(req.query.page);
-    if(num===undefined){
+    if(!num){
         if(newTweets.length<=10){
             res.send(newTweets);
         }
         res.send(newTweets.slice(0,10));
     }
-    if(num==="" || num<=1){
+    if(num==="" || num<1){
         res.status(400).send("Informe uma página válida!");
     }else{
         const INICIALINTERVALSLICE=10*(num-1);
