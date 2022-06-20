@@ -19,20 +19,28 @@ const tweets=[];
 app.post('/sign-up',(req,res)=>{
     users.push(req.body);
     res.send('OK');
-    // res.send(user);
 });
 
 app.post('/tweets', (req,res)=>{
     tweets.push(req.body);
     res.send('OK');
-    //res.send(tweets);
 });
 
+function generateTweetsToSend(){
+    return tweets.map(tweet=>{
+        const userSearched=users.find(user=>user.username===tweet.username);
+        return {...tweet,avatar:userSearched.avatar}
+    })
+}
+
 app.get('/tweets', (req,res)=>{
-    if(tweets.length<=10){
-        res.send(tweets);
+    const newTweets=generateTweetsToSend();
+    if(newTweets.length<=10){
+        res.send(newTweets.reverse());
     }
-    res.send(tweets.slice(tweets.length-11,tweets.length-1));
+    const tweetsReversed=newTweets.reverse();
+    res.send(tweetsReversed.slice(0,10));
 })
 
 app.listen(5000,()=>console.log("Servidor rodou!"));
+
