@@ -38,23 +38,22 @@ function generateTweetsToSend(){
     return tweets.map(tweet=>{
         const userSearched=users.find(user=>tweet.username===user.username);
         return {...tweet,avatar:userSearched.avatar}
-    });
+    }).reverse();
 }
 
 app.get('/tweets', (req,res)=>{
     const newTweets=generateTweetsToSend();
     if(newTweets.length<=10){
-        res.send(newTweets.reverse());
+        res.send(newTweets);
     }
-    const tweetsReversed=newTweets.reverse();
-    res.send(tweetsReversed.slice(0,10));
+    res.send(newTweets.slice(0,10));
 })
 
 app.get('/tweets/:userName', (req,res)=>{
     const userName=req.params.userName;
     const newTweets=generateTweetsToSend();
     const userTweets=newTweets.filter(tweet=>tweet.username===userName);
-    res.send(userTweets.reverse());
+    res.send(userTweets);
 })
 
 app.listen(5000,()=>console.log("Servidor rodou!"));
