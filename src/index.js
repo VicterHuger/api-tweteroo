@@ -36,9 +36,9 @@ app.post('/tweets', (req,res)=>{
 
 function generateTweetsToSend(){
     return tweets.map(tweet=>{
-        const userSearched=users.find(user=>user.username===tweet.username);
+        const userSearched=users.find(user=>tweet.username===user.username);
         return {...tweet,avatar:userSearched.avatar}
-    })
+    });
 }
 
 app.get('/tweets', (req,res)=>{
@@ -48,6 +48,13 @@ app.get('/tweets', (req,res)=>{
     }
     const tweetsReversed=newTweets.reverse();
     res.send(tweetsReversed.slice(0,10));
+})
+
+app.get('/tweets/:userName', (req,res)=>{
+    const userName=req.params.userName;
+    const newTweets=generateTweetsToSend();
+    const userTweets=newTweets.filter(tweet=>tweet.username===userName);
+    res.send(userTweets.reverse());
 })
 
 app.listen(5000,()=>console.log("Servidor rodou!"));
