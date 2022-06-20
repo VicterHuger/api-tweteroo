@@ -43,11 +43,21 @@ function generateTweetsToSend(){
 
 app.get('/tweets', (req,res)=>{
     const newTweets=generateTweetsToSend();
-    if(newTweets.length<=10){
-        res.send(newTweets);
+    const num=parseInt(req.query.page);
+    if(num===undefined){
+        if(newTweets.length<=10){
+            res.send(newTweets);
+        }
+        res.send(newTweets.slice(0,10));
     }
-    res.send(newTweets.slice(0,10));
-})
+    if(num==="" || num<=1){
+        res.status(400).send("Informe uma página válida!");
+    }else{
+        const INICIALINTERVALSLICE=10*(num-1);
+        const FINALINTERVALSLICE=INICIALINTERVALSLICE+10;
+        res.send(newTweets.slice(INICIALINTERVALSLICE,FINALINTERVALSLICE));
+    }
+});
 
 app.get('/tweets/:userName', (req,res)=>{
     const userName=req.params.userName;
